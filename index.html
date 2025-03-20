@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Tendencias Blockchain con Mayor Inversión</title>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -85,5 +85,28 @@
         </div>
     </div>
     <script src="script.js"></script>
+    
+    <!-- Script para comunicarse con el iframe de Medium -->
+    <script>
+    // Notificar al contenedor padre (Medium) sobre el tamaño del contenido
+    function updateParentSize() {
+      const height = document.body.scrollHeight;
+      if (window.parent) {
+        window.parent.postMessage({ type: 'resize', height: height }, '*');
+      }
+    }
+    
+    // Ejecutar al cargar y después de cualquier cambio en el contenido
+    window.addEventListener('load', updateParentSize);
+    window.addEventListener('resize', updateParentSize);
+    
+    // También intentar actualizar cuando la visualización cambie
+    document.querySelectorAll('.bar-item').forEach(item => {
+      item.addEventListener('click', function() {
+        // Dar tiempo para que se muestre el panel de información
+        setTimeout(updateParentSize, 100);
+      });
+    });
+    </script>
 </body>
 </html>

@@ -72,6 +72,14 @@ document.querySelectorAll('.bar-item').forEach(item => {
         document.querySelectorAll('.bar-item').forEach(bar => {
             bar.style.backgroundColor = bar === this ? 'var(--hover-color)' : '';
         });
+        
+        // Forzar una actualización de la altura para cuando está embebido
+        if (window.parent) {
+            setTimeout(function() {
+                const height = document.body.scrollHeight;
+                window.parent.postMessage({ type: 'resize', height: height }, '*');
+            }, 200);
+        }
     });
 });
 
@@ -82,4 +90,24 @@ document.querySelectorAll('.bar-inner').forEach(bar => {
     setTimeout(() => {
         bar.style.width = width;
     }, 300);
+});
+
+// Seleccionar automáticamente el primer elemento después de cargar
+window.addEventListener('load', function() {
+    // Esperar a que se complete la animación inicial
+    setTimeout(function() {
+        // Simular un clic en el primer elemento
+        const firstItem = document.querySelector('.bar-item');
+        if (firstItem) {
+            firstItem.click();
+        }
+    }, 500);
+    
+    // También intentar ajustar la altura para Medium
+    setTimeout(function() {
+        if (window.parent) {
+            const height = Math.max(700, document.body.scrollHeight);
+            window.parent.postMessage({ type: 'resize', height: height }, '*');
+        }
+    }, 1000);
 });
